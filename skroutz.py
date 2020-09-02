@@ -7,6 +7,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 import json
 import time
+import os.path
 
 options = Options()
 options.add_argument('--headless')
@@ -122,11 +123,12 @@ while page <= max_pages:
         print(price_to_num(price.text), "€")
     driver.get(current_url + "&page=" + str(page))
     page += 1
-with open('products.json', 'r') as json_file:
-    data = json.load(json_file)
-    products = []
-    for p in data['Products']:
-        products.append(p)
+products = []
+if os.path.isfile('products.json'):
+    with open('products.json', 'r') as json_file:
+        data = json.load(json_file)
+        for p in data['Products']:
+            products.append(p)
 if cheapest != "":
     print("Cheapest item:", cheapest, cheapest_price, "€")
     print(cheapest_url)
